@@ -11,6 +11,7 @@
 		B583EBD326E4EB230022A215 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B583EBD226E4EB230022A215 /* ContentView.swift */; };
 		B583EBD526E4EB240022A215 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B583EBD426E4EB240022A215 /* Assets.xcassets */; };
 		B583EBD826E4EB240022A215 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B583EBD726E4EB240022A215 /* Preview Assets.xcassets */; };
+		B583EBE426E4F16A0022A215 /* Nuclear.swift in Sources */ = {isa = PBXBuildFile; fileRef = B583EBE326E4F16A0022A215 /* Nuclear.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		B583EBD426E4EB240022A215 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B583EBD726E4EB240022A215 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B583EBD926E4EB240022A215 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B583EBE326E4F16A0022A215 /* Nuclear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nuclear.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +38,7 @@
 		B583EBC426E4EB220022A215 = {
 			isa = PBXGroup;
 			children = (
+				B583EBE126E4F16A0022A215 /* Sources */,
 				B583EBCF26E4EB230022A215 /* NuclearTesting */,
 				B583EBCE26E4EB230022A215 /* Products */,
 			);
@@ -67,6 +70,22 @@
 				B583EBD726E4EB240022A215 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B583EBE126E4F16A0022A215 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				B583EBE226E4F16A0022A215 /* Nuclear */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		B583EBE226E4F16A0022A215 /* Nuclear */ = {
+			isa = PBXGroup;
+			children = (
+				B583EBE326E4F16A0022A215 /* Nuclear.swift */,
+			);
+			path = Nuclear;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B583EBD326E4EB230022A215 /* ContentView.swift in Sources */,
+				B583EBE426E4F16A0022A215 /* Nuclear.swift in Sources */,
 				B583EBD126E4EB230022A215 /* NuclearTestingApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
