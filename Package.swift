@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Nuclear",
 	 platforms: [
-			  .iOS(.v14),
+			  .iOS(.v13),
 			  .watchOS(.v6)
 		 ],
     products: [
