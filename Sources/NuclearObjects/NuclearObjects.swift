@@ -7,42 +7,75 @@
 
 import Foundation
 
+public protocol ReversibleNuclearObject {} 		// confirm to this if an object's phase can both increase and decrease
 public protocol VersionedNucleus: Codable {
-	associatedtype State: Codable & Comparable
+	associatedtype Phase: Codable & Comparable
 	var version: Int { get set }
+	var id: String { get set }
 	
-	var phoneState: State { get set }
-	var watchState: State { get set }
+	var phonePhase: Phase { get set }
+	var watchPhase: Phase { get set }
 }
 
 public extension VersionedNucleus {
-	var currentState: State { phoneState > watchState ? phoneState : watchState }
-	mutating func setDeviceState(_ state: State) {
+	var currentPhase: Phase { phonePhase > watchPhase ? phonePhase : watchPhase }
+	mutating func setDevicePhase(_ phase: Phase) {
 		#if os(iOS)
-			phoneState = state
+			phonePhase = phase
 		#endif
 		#if os(watchOS)
-			watchState = state
+			watchPhase = phase
 		#endif
+	}
+	
+	init(json: [String: Any]) throws {
+		let data = try JSONSerialization.data(withJSONObject: json, options: [])
+		self = try JSONDecoder().decode(Self.self, from: data)
 	}
 }
 
 public protocol NuclearObject: AnyObject {
 	associatedtype Nucleus: VersionedNucleus
 	var nucleus: Nucleus { get set }
-	func stateChanged(from oldState: Nucleus.State, to newState: Nucleus.State)
+	func phaseChanged(from oldPhase: Nucleus.Phase, to newPhase: Nucleus.Phase, locally: Bool)
 }
 
 public extension NuclearObject {
+	func incrementVersion() {
+		nucleus.version += 1
+	}
+
+	func advance(to phase: Nucleus.Phase) {
+		if phase <= nucleus.currentPhase { return }
+		let oldPhase = nucleus.currentPhase
+		nucleus.setDevicePhase(phase)
+		incrementVersion()
+		phaseChanged(from: oldPhase, to: phase, locally: true)
+	}
+
 	func load(nucleus new: Nucleus) {
-		if new.version <= nucleus.version { return }  		// hasn't updated
+		if new.id != nucleus.id || new.version < nucleus.version { return }  		// hasn't updated
 		
 		let old = nucleus
 		self.nucleus = new
 		
-		if old.currentState > new.currentState {
-			nucleus.setDeviceState(new.currentState)
-			stateChanged(from: old.currentState, to: new.currentState)
+		if old.currentPhase > new.currentPhase {
+			nucleus.setDevicePhase(new.currentPhase)
+			phaseChanged(from: old.currentPhase, to: new.currentPhase, locally: false)
+		}
+	}
+	
+	func load(nucleus json: [String: Any]) throws {
+		let new = try Nucleus(json: json)
+		if new.version < nucleus.version { return }  		// hasn't updated
+		
+		let old = nucleus
+		self.nucleus = new
+		
+		if old.currentPhase > new.currentPhase, !(self is ReversibleNuclearObject) { return }
+		if old.currentPhase != new.currentPhase {
+			nucleus.setDevicePhase(new.currentPhase)
+			phaseChanged(from: old.currentPhase, to: new.currentPhase, locally: false)
 		}
 	}
 	
