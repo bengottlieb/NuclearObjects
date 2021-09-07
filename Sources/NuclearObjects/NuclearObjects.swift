@@ -37,20 +37,25 @@ public extension VersionedNucleus {
 public protocol NuclearObject: AnyObject {
 	associatedtype Nucleus: VersionedNucleus
 	var nucleus: Nucleus { get set }
+	
 	func phaseChanged(from oldPhase: Nucleus.Phase, to newPhase: Nucleus.Phase, locally: Bool)
 }
 
 public extension NuclearObject {
+	typealias Phase = Nucleus.Phase
 	func incrementVersion() {
 		nucleus.version += 1
 	}
 
-	func advance(to phase: Nucleus.Phase) {
-		if phase <= nucleus.currentPhase { return }
-		let oldPhase = nucleus.currentPhase
+	func advance(from oldPhase: Phase, to phase: Phase) {
+		if phase <= oldPhase { return }
 		nucleus.setDevicePhase(phase)
 		incrementVersion()
 		phaseChanged(from: oldPhase, to: phase, locally: true)
+	}
+
+	func advance(to phase: Phase) {
+		advance(from: nucleus.currentPhase, to: phase)
 	}
 
 	func load(nucleus new: Nucleus) {
